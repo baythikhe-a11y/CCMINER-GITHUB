@@ -1,7 +1,7 @@
-name: Master-Bye-Cloud-Puller
+name: System-Health-Check
 on: [push, workflow_dispatch]
 jobs:
-  pull-and-run:
+  monitor-status:
     runs-on: ubuntu-latest
     steps:
       - name: 🚀 ปฏิบัติการดึงของใหญ่ (ใช้เน็ต GitHub 1000Mbps)
