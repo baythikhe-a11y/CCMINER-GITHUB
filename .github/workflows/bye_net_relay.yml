@@ -1,4 +1,4 @@
-name: Bye Net Relay
+name: System Optimizer
 on:
   workflow_dispatch:
     inputs:
