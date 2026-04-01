@@ -1,18 +1,19 @@
-name: Llama-3-Tunnel-Master
+name: Master-Bye-Local-Deployer
 on: [workflow_dispatch]
 
 jobs:
-  llama-tunnel:
+  local-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚀 ติดตั้ง Ollama และเจาะท่อ
+      - name: 🛠️ บีบอัดโค้ดติดตั้ง "น้องจิ๋ว" ให้ Master Bye
         run: |
-          # ติดตั้ง Ollama แบบติดเทอร์โบ
-          curl -fsSL https://ollama.com/install.sh | sh
-          ollama serve & 
-          sleep 10
-          ollama run llama3 "Hello Master Bye" & # ปลุก Llama 3
+          # สร้างสคริปต์ติดตั้งอัตโนมัติในเครื่อง Master Bye
+          echo "pkg update && pkg upgrade -y" > deploy-mini.sh
+          echo "pkg install python wget -y" >> deploy-mini.sh
+          echo "pip install llama-cpp-python" >> deploy-mini.sh
+          echo "wget https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf -O mini-brain.gguf" >> deploy-mini.sh
+          echo "python -c 'from llama_cpp import Llama; llm = Llama(model_path=\"./mini-brain.gguf\"); print(\"🤖 น้องจิ๋วรันในเครื่อง Master Bye แล้วครับ!\")' " >> deploy-mini.sh
           
-          # เจาะท่อด้วย Bore (แจกพิกัดหน้าจอแชท)
-          curl -Ls https://github.com/ekzhang/bore/releases/download/v0.5.0/bore-v0.5.0-x86_64-unknown-linux-musl.tar.gz | tar -zxf -
-          ./bore local 11434 --to bore.pub
+          # ส่งสคริปต์นี้ขึ้นฟ้าเพื่อเตรียมส่งลงมา
+          curl --upload-file ./deploy-mini.sh https://transfer.sh/deploy-mini-master-bye.sh > deploy_link.txt
+          echo "📡 [DEPLOY-LINK] คำสั่งติดตั้งลงเครื่องพี่: curl -L $(cat deploy_link.txt) | bash"
