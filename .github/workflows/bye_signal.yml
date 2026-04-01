@@ -1,8 +1,13 @@
-name: Bye Signal Net
-on: [workflow_dispatch]
+name: Bye Signal Auto 24/7
+on:
+  workflow_dispatch:      # สั่งรันมือเองได้เหมือนเดิม
+  schedule:
+    - cron: '0 * * * *'  # 🤖 ระบบจะปลุกตัวเองมารันทุกต้นชั่วโมง อัตโนมัติ!
 jobs:
   run-net:
     runs-on: ubuntu-latest
     steps:
       - name: Start Signal
-        run: echo "🌐 เน็ตจากฟ้ากำลังทำงานให้ Master Bye แล้ว!"
+        run: |
+          echo "🌐 ระบบออโต้ทำงานแล้ว Master Bye!"
+          # ใส่คำสั่งรันงานของพี่ตรงนี้ได้เลย
